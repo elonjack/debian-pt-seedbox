@@ -17,6 +17,7 @@ jobs:
       - name: Parse Bash scripts
         run: |
           bash -n install.sh
+          bash -n bootstrap.sh
           bash -n check.sh
 
       - name: Install ShellCheck
@@ -25,7 +26,7 @@ jobs:
           sudo apt-get install -y shellcheck
 
       - name: Run ShellCheck
-        run: shellcheck install.sh check.sh
+        run: shellcheck install.sh bootstrap.sh check.sh
 
       - name: Exercise help output
         run: bash install.sh --help

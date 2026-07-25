@@ -2,7 +2,7 @@
 set -Eeuo pipefail
 IFS=$'\n\t'
 
-VERSION="1.0.0"
+VERSION="1.1.0"
 QBT_USER="qbt"
 QBT_GROUP="qbt"
 QBT_HOME="/var/lib/qbittorrent"
@@ -291,12 +291,14 @@ printf '\n\033[1;32m安装完成。\033[0m\n'
 cat <<EOF
 
 下一步（必须完成）：
-  1. Cloudflare 中确认 ${DOMAIN} 指向这台 VPS，代理状态为“仅 DNS/灰云”。
+  1. 首次签发证书时先让 ${DOMAIN} 直接解析到这台 VPS（仅 DNS/灰云）。
   2. 查看首次登录临时密码：
        journalctl -u ${SERVICE_NAME} --no-pager | grep -i 'password'
   3. 浏览器打开：
        https://${DOMAIN}
-  4. 立即修改 WebUI 用户名和强密码，并按 docs/小白操作手册.md 完成全部设置。
+  4. 立即修改 WebUI 用户名和强密码，并按中文操作手册完成全部设置。
+  5. HTTPS 正常后，可按手册把该 WebUI 域名切换为 Cloudflare“已代理/小黄云”，
+     SSL/TLS 模式使用 Full (strict)。BT 端口 ${PEER_PORT} 仍必须直连公网。
 
 检查命令：
   systemctl status ${SERVICE_NAME} --no-pager
