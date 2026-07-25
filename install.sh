@@ -2,7 +2,7 @@
 set -Eeuo pipefail
 IFS=$'\n\t'
 
-VERSION="1.2.0"
+VERSION="1.2.1"
 QBT_USER="qbt"
 QBT_GROUP="qbt"
 QBT_HOME="/var/lib/qbittorrent"
@@ -189,7 +189,7 @@ if [[ -s /etc/caddy/Caddyfile ]] \
 fi
 
 if [[ "$ASSUME_YES" != "true" ]]; then
-  read -r -p "确认以上信息正确并继续？输入 yes：" answer
+  read -r -p "确认以上信息正确，并知悉 qBittorrent 会向他人上传数据且由你负责？输入 yes：" answer
   [[ "$answer" == "yes" ]] || die "用户取消"
 fi
 
@@ -259,6 +259,9 @@ qbt_config="${qbt_config_dir}/qBittorrent.conf"
 install -d -o "$QBT_USER" -g "$QBT_GROUP" -m 0750 "$qbt_config_dir"
 if [[ ! -e "$qbt_config" ]]; then
   cat > "$qbt_config" <<EOF
+[LegalNotice]
+Accepted=true
+
 [Preferences]
 Connection\\PortRangeMin=${PEER_PORT}
 WebUI\\Address=127.0.0.1
@@ -284,7 +287,7 @@ Group=${QBT_GROUP}
 Environment=HOME=${QBT_HOME}
 Environment=LANG=C.UTF-8
 UMask=0027
-ExecStart=/usr/bin/qbittorrent-nox --confirm-legal-notice --webui-port=${WEBUI_PORT}
+ExecStart=/usr/bin/qbittorrent-nox --webui-port=${WEBUI_PORT}
 Restart=on-failure
 RestartSec=5s
 NoNewPrivileges=true
@@ -420,7 +423,7 @@ cat <<EOF
 必须继续完成：
   1. 用上面的随机密码登录，并立即改成你自己的强密码。
   2. 按 README 和 qBittorrent 设置清单完成 PT 安全设置。
-  3. HTTPS 正常后，可把 Cloudflare 切换成“已代理/小黄云”，SSL/TLS 使用 Full (strict)。
+  3. HTTPS 正常后，可把 Cloudflare 切换成「已代理/小黄云」，SSL/TLS 使用 Full (strict)。
   4. BT 端口 ${PEER_PORT} 不能走 Cloudflare，必须直接连接 VPS 公网 IP。
 
 检查命令：

@@ -22,11 +22,27 @@ webui_port="18080"
 peer_port="49161"
 cookie_file="/tmp/qbt-test-cookie"
 log_file="/tmp/qbt-test.log"
+process_group=""
+
+on_error() {
+  local exit_code=$?
+  printf '::error file=tests/compatibility.sh,line=%s::命令失败（退出码 %s）：%s\n' \
+    "${BASH_LINENO[0]:-0}" "$exit_code" "${BASH_COMMAND:-未知}" >&2
+  if [[ -s "$log_file" ]]; then
+    echo "----- qBittorrent log -----" >&2
+    cat "$log_file" >&2
+  fi
+  exit "$exit_code"
+}
+trap on_error ERR
 
 useradd --system --user-group --home-dir "$test_home" "$test_user"
 install -d -o "$test_user" -g "$test_user" -m 0750 \
   "$test_home/.config/qBittorrent"
 cat > "$test_home/.config/qBittorrent/qBittorrent.conf" <<EOF
+[LegalNotice]
+Accepted=true
+
 [Preferences]
 Connection\\PortRangeMin=${peer_port}
 WebUI\\Address=127.0.0.1
@@ -38,13 +54,15 @@ chmod 0600 "$test_home/.config/qBittorrent/qBittorrent.conf"
 
 setsid runuser -u "$test_user" -- \
   env HOME="$test_home" LANG=C.UTF-8 \
-  qbittorrent-nox --confirm-legal-notice --webui-port="$webui_port" \
+  qbittorrent-nox --webui-port="$webui_port" \
   >"$log_file" 2>&1 &
 process_group="$!"
 
 cleanup() {
-  kill -- "-${process_group}" >/dev/null 2>&1 || true
-  wait "$process_group" >/dev/null 2>&1 || true
+  if [[ -n "$process_group" ]]; then
+    kill -- "-${process_group}" >/dev/null 2>&1 || true
+    wait "$process_group" >/dev/null 2>&1 || true
+  fi
 }
 trap cleanup EXIT
 

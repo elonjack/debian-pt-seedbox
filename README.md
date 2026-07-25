@@ -41,12 +41,12 @@
 
 ## 一行安装
 
-当前稳定版：**v1.2.0**。
+当前稳定版：**v1.2.1**。
 
 在全新的 Debian 12/13 VPS 上，以 root 身份把下面整行复制一次：
 
 ```bash
-apt-get update -qq && apt-get install -y -qq curl ca-certificates && curl --proto '=https' --tlsv1.2 -fsSLo /tmp/pt-bootstrap.sh https://github.com/elonjack/debian-pt-seedbox/releases/download/v1.2.0/bootstrap.sh && bash /tmp/pt-bootstrap.sh
+apt-get update -qq && apt-get install -y -qq curl ca-certificates && curl --proto '=https' --tlsv1.2 -fsSLo /tmp/pt-bootstrap.sh https://github.com/elonjack/debian-pt-seedbox/releases/download/v1.2.1/bootstrap.sh && bash /tmp/pt-bootstrap.sh
 ```
 
 脚本会询问完整子域名。这里必须输入你自己的域名，例如：
@@ -60,7 +60,7 @@ qbt2.qgv.de5.net
 非交互安装可以把自己的域名写在同一行末尾：
 
 ```bash
-apt-get update -qq && apt-get install -y -qq curl ca-certificates && curl --proto '=https' --tlsv1.2 -fsSLo /tmp/pt-bootstrap.sh https://github.com/elonjack/debian-pt-seedbox/releases/download/v1.2.0/bootstrap.sh && bash /tmp/pt-bootstrap.sh --domain qbt2.example.com --yes
+apt-get update -qq && apt-get install -y -qq curl ca-certificates && curl --proto '=https' --tlsv1.2 -fsSLo /tmp/pt-bootstrap.sh https://github.com/elonjack/debian-pt-seedbox/releases/download/v1.2.1/bootstrap.sh && bash /tmp/pt-bootstrap.sh --domain qbt2.example.com --yes
 ```
 
 上面第二条命令中的 `qbt2.example.com` 必须替换为你自己的完整子域名。
@@ -141,7 +141,7 @@ ss -lntup | grep -E '8080|49160'
 完整诊断：
 
 ```bash
-curl --proto '=https' --tlsv1.2 -fsSLo /root/qbt-check.sh https://github.com/elonjack/debian-pt-seedbox/releases/download/v1.2.0/check.sh && bash /root/qbt-check.sh
+curl --proto '=https' --tlsv1.2 -fsSLo /root/qbt-check.sh https://github.com/elonjack/debian-pt-seedbox/releases/download/v1.2.1/check.sh && bash /root/qbt-check.sh
 ```
 
 ## 文档
