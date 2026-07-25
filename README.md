@@ -30,10 +30,10 @@
 
 ## 真正的一行安装（推荐）
 
-当前稳定版为 **v1.1.0**。先登录全新的 Debian 13 VPS，以 `root` 身份把下面整行复制一次：
+当前稳定版为 **v1.1.1**。先登录全新的 Debian 13 VPS，以 `root` 身份把下面整行复制一次：
 
 ```bash
-apt-get update -qq && apt-get install -y -qq curl ca-certificates && curl --proto '=https' --tlsv1.2 -fsSLo /tmp/pt-bootstrap.sh https://github.com/elonjack/debian-pt-seedbox/releases/download/v1.1.0/bootstrap.sh && bash /tmp/pt-bootstrap.sh --domain qbt2.example.com
+apt-get update -qq && apt-get install -y -qq curl ca-certificates && curl --proto '=https' --tlsv1.2 -fsSLo /tmp/pt-bootstrap.sh https://github.com/elonjack/debian-pt-seedbox/releases/download/v1.1.1/bootstrap.sh && bash /tmp/pt-bootstrap.sh --domain qbt2.example.com
 ```
 
 这是一条命令：它安装下载工具、获取固定 Release 的 Bootstrap、下载 `install.sh`、校验 SHA-256，再开始交互式安装。脚本会自动识别当前 SSH 会话使用的端口。
@@ -41,13 +41,13 @@ apt-get update -qq && apt-get install -y -qq curl ca-certificates && curl --prot
 你的第二台 VPS 示例：
 
 ```bash
-apt-get update -qq && apt-get install -y -qq curl ca-certificates && curl --proto '=https' --tlsv1.2 -fsSLo /tmp/pt-bootstrap.sh https://github.com/elonjack/debian-pt-seedbox/releases/download/v1.1.0/bootstrap.sh && bash /tmp/pt-bootstrap.sh --domain qbt2.qgv.de5.net
+apt-get update -qq && apt-get install -y -qq curl ca-certificates && curl --proto '=https' --tlsv1.2 -fsSLo /tmp/pt-bootstrap.sh https://github.com/elonjack/debian-pt-seedbox/releases/download/v1.1.1/bootstrap.sh && bash /tmp/pt-bootstrap.sh --domain qbt2.qgv.de5.net
 ```
 
 若 SSH 不是 22 或需要自定义参数，仍然只复制一行：
 
 ```bash
-apt-get update -qq && apt-get install -y -qq curl ca-certificates && curl --proto '=https' --tlsv1.2 -fsSLo /tmp/pt-bootstrap.sh https://github.com/elonjack/debian-pt-seedbox/releases/download/v1.1.0/bootstrap.sh && bash /tmp/pt-bootstrap.sh --domain qbt2.example.com --ssh-port 你的SSH端口 --peer-port 49160 --swap-mb 1024
+apt-get update -qq && apt-get install -y -qq curl ca-certificates && curl --proto '=https' --tlsv1.2 -fsSLo /tmp/pt-bootstrap.sh https://github.com/elonjack/debian-pt-seedbox/releases/download/v1.1.1/bootstrap.sh && bash /tmp/pt-bootstrap.sh --domain qbt2.example.com --ssh-port 你的SSH端口 --peer-port 49160 --swap-mb 1024
 ```
 
 这里没有使用 `curl | bash`，下载失败时不会执行残缺脚本。Bootstrap 还会核对安装脚本的固定 SHA-256。
@@ -59,7 +59,7 @@ apt-get update -qq && apt-get install -y -qq curl ca-certificates && curl --prot
 ```bash
 apt-get update
 apt-get install -y git
-git clone --branch v1.1.0 --depth 1 https://github.com/elonjack/debian-pt-seedbox.git
+git clone --branch v1.1.1 --depth 1 https://github.com/elonjack/debian-pt-seedbox.git
 cd debian-pt-seedbox
 less install.sh
 bash install.sh --domain qbt2.example.com
@@ -156,4 +156,4 @@ git log -1 --oneline
 
 ## 项目状态
 
-当前稳定版为 `v1.1.0`，按照 Debian 13、qBittorrent 5.1.x 和 Caddy 的组合编写。站点规则可能随时变化，速度、H&R 和客户端白名单以站点当日规则为准。
+当前稳定版为 `v1.1.1`，按照 Debian 13、qBittorrent 5.1.x 和 Caddy 的组合编写。站点规则可能随时变化，速度、H&R 和客户端白名单以站点当日规则为准。

@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-VERSION="1.1.0"
+VERSION="1.1.1"
 REPOSITORY="elonjack/debian-pt-seedbox"
-INSTALL_SHA256="f6cfb423cf098464c2eff17f99ab095b5665f6f27266aee9a05ef82be79c1b09"
+INSTALL_SHA256="0e749b2279c901507dc8f033cceea3f693130a049a3e8dcd62a23631e50a1c25"
 BASE_URL="https://github.com/${REPOSITORY}/releases/download/v${VERSION}"
 
 die() {

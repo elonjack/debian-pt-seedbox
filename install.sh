@@ -2,7 +2,7 @@
 set -Eeuo pipefail
 IFS=$'\n\t'
 
-VERSION="1.1.0"
+VERSION="1.1.1"
 QBT_USER="qbt"
 QBT_GROUP="qbt"
 QBT_HOME="/var/lib/qbittorrent"
@@ -152,6 +152,7 @@ fi
 cat <<EOF
 
 即将安装：
+  脚本版本：    ${VERSION}
   系统：        ${PRETTY_NAME}
   WebUI 域名： ${DOMAIN}
   SSH 端口：   ${SSH_PORT}/tcp（会先放行，防止 UFW 锁住 SSH）
@@ -297,7 +298,7 @@ cat <<EOF
   3. 浏览器打开：
        https://${DOMAIN}
   4. 立即修改 WebUI 用户名和强密码，并按中文操作手册完成全部设置。
-  5. HTTPS 正常后，可按手册把该 WebUI 域名切换为 Cloudflare“已代理/小黄云”，
+  5. HTTPS 正常后，可按手册把该 WebUI 域名切换为 Cloudflare "已代理/小黄云"，
      SSL/TLS 模式使用 Full (strict)。BT 端口 ${PEER_PORT} 仍必须直连公网。
 
 检查命令：
