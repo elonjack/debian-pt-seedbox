@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-VERSION="1.1.1"
+VERSION="1.1.2"
 REPOSITORY="elonjack/debian-pt-seedbox"
-INSTALL_SHA256="0e749b2279c901507dc8f033cceea3f693130a049a3e8dcd62a23631e50a1c25"
+INSTALL_SHA256="8044c1cab7077d9c3802153973551b0d1ff9967ceab391501bc950b04e0f22aa"
 BASE_URL="https://github.com/${REPOSITORY}/releases/download/v${VERSION}"
 
 die() {
@@ -13,6 +13,24 @@ die() {
 
 [[ "${EUID}" -eq 0 ]] || die "请切换到 root 后再执行一行安装命令"
 command -v sha256sum >/dev/null 2>&1 || die "系统缺少 sha256sum"
+
+has_domain="false"
+for argument in "$@"; do
+  if [[ "$argument" == "--domain" ]]; then
+    has_domain="true"
+    break
+  fi
+done
+
+if [[ "$has_domain" != "true" ]]; then
+  [[ -t 0 ]] || die "非交互运行必须明确指定：--domain 你自己的完整子域名"
+  printf '请输入这台 VPS 使用的完整 WebUI 子域名（例如 qbt2.example.com）：'
+  if ! read -r domain; then
+    die "没有读到域名"
+  fi
+  [[ -n "$domain" ]] || die "域名不能为空"
+  set -- --domain "$domain" "$@"
+fi
 
 temp_dir="$(mktemp -d /tmp/debian-pt-seedbox.XXXXXX)"
 trap 'rm -rf -- "$temp_dir"' EXIT

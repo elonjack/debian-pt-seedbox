@@ -2,7 +2,7 @@
 set -Eeuo pipefail
 IFS=$'\n\t'
 
-VERSION="1.1.1"
+VERSION="1.1.2"
 QBT_USER="qbt"
 QBT_GROUP="qbt"
 QBT_HOME="/var/lib/qbittorrent"
@@ -58,6 +58,8 @@ Debian 13 qBittorrent PT 基础环境安装脚本
 示例：
   bash install.sh --domain qbt2.example.com
   bash install.sh --domain qbt2.example.com --peer-port 49161 --swap-mb 1024 --yes
+
+注意：qbt2.example.com 只是示例，必须替换成你自己在 DNS 中创建的完整子域名。
 EOF
 }
 
