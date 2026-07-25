@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
 
       - name: Parse Bash scripts
         run: |
@@ -26,7 +26,34 @@ jobs:
           sudo apt-get install -y shellcheck
 
       - name: Run ShellCheck
-        run: shellcheck install.sh bootstrap.sh check.sh
+        run: shellcheck install.sh bootstrap.sh check.sh tests/compatibility.sh
 
       - name: Exercise help output
         run: bash install.sh --help
+
+  debian-matrix:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        debian: ["12", "13"]
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
+      - name: Run non-mutating preflight on Debian
+        run: |
+          docker run --rm \
+            -v "${PWD}:/src:ro" \
+            "debian:${{ matrix.debian }}-slim" \
+            bash /src/install.sh \
+              --domain qbt.example.com \
+              --check-only \
+              --yes
+
+      - name: Test Debian packages, loopback binding and WebAPI password flow
+        run: |
+          docker run --rm \
+            -v "${PWD}:/src:ro" \
+            "debian:${{ matrix.debian }}-slim" \
+            bash /src/tests/compatibility.sh

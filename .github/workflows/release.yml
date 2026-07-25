@@ -8,7 +8,10 @@ on:
       - VERSION
       - install.sh
       - bootstrap.sh
+      - check.sh
       - CHANGELOG.md
+      - docs/**
+      - README.md
       - .github/workflows/release.yml
 
 permissions:
@@ -19,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           fetch-depth: 0
 
@@ -31,8 +34,10 @@ jobs:
           [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
           grep -qx "VERSION=\"${version}\"" install.sh
           grep -qx "VERSION=\"${version}\"" bootstrap.sh
+          [[ "$(grep -c '^INSTALL_SHA256=\"[0-9a-f]\{64\}\"$' bootstrap.sh)" -eq 1 ]]
           bash -n install.sh
           bash -n bootstrap.sh
+          bash -n check.sh
 
       - name: Build release files
         shell: bash
@@ -42,13 +47,16 @@ jobs:
           mkdir -p dist/package
           install -m 0755 install.sh dist/install.sh
           install -m 0755 bootstrap.sh dist/bootstrap.sh
-          cp README.md CHANGELOG.md LICENSE check.sh dist/package/
+          install -m 0755 check.sh dist/check.sh
+          install -m 0755 check.sh dist/package/check.sh
+          cp README.md CHANGELOG.md SECURITY.md LICENSE dist/package/
           cp install.sh bootstrap.sh VERSION dist/package/
           cp -R docs dist/package/
+          cp -R tests dist/package/
           tar -C dist/package -czf "dist/debian-pt-seedbox-v${version}.tar.gz" .
           (
             cd dist
-            sha256sum install.sh bootstrap.sh "debian-pt-seedbox-v${version}.tar.gz" > SHA256SUMS
+            sha256sum install.sh bootstrap.sh check.sh "debian-pt-seedbox-v${version}.tar.gz" > SHA256SUMS
           )
 
       - name: Create tag and GitHub Release
@@ -65,16 +73,15 @@ jobs:
             exit 0
           fi
 
-          if ! git rev-parse --verify "refs/tags/${tag}" >/dev/null 2>&1; then
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git tag -a "$tag" -m "Debian PT Seedbox ${tag}"
-            git push origin "$tag"
-          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$tag" -m "Debian PT Seedbox ${tag}"
+          git push origin "$tag"
 
           gh release create "$tag" \
             dist/install.sh \
             dist/bootstrap.sh \
+            dist/check.sh \
             dist/SHA256SUMS \
             "dist/debian-pt-seedbox-${tag}.tar.gz" \
             --repo "$GITHUB_REPOSITORY" \

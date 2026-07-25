@@ -1,27 +1,53 @@
 # 更新记录
 
-## v1.1.2
+## 1.2.0 - 2026-07-25
 
-- 一行安装命令不再内置任何示例域名，运行后会主动询问用户自己的完整子域名；
-- 在手动安装示例旁明确标注 `example.com` 必须替换；
-- 从项目文档中移除针对单次用户截图编写的速度分析。
+### 新增
 
-## v1.1.1
+- 正式支持 Debian 12 bookworm 与 Debian 13 trixie（amd64）。
+- 增加 Debian 12/13 容器矩阵预检查与真实软件包/WebAPI 兼容测试。
+- 增加 `--check-only` 非破坏性兼容检查。
+- 自动生成并验证首次 WebUI 强密码。
+- 自动写入 PT 基础安全项：关闭 DHT/PeX/LSD/公共 Tracker、随机端口与 UPnP，并启用 WebUI 防护。
 
-- 修复 ShellCheck 对未使用版本变量和 Unicode 引号的警告；
-- 安装前摘要现在会明确显示脚本版本；
-- 一行安装入口更新到通过完整 CI 的补丁版本。
+### 安全修复
 
-## v1.1.0
+- 首次启动前将 WebUI 绑定到 `127.0.0.1`，消除短暂公网监听窗口。
+- Debian 12 不再保留公开默认密码 `adminadmin`。
+- 在修改系统前检测并拒绝覆盖已有 Caddy 配置。
+- 拒绝覆盖已安装实例，保护现有 qBittorrent 任务。
+- 固定 GitHub Actions checkout 到完整提交 SHA。
+- `check.sh` 不再 `source` 配置文件，避免把配置内容当 shell 代码执行。
 
-- 增加真正可复制一次执行的“一行安装”入口；
-- 安装入口固定到 Release 版本，不直接执行会变化的 `main`；
-- Bootstrap 下载后校验 `install.sh` 的 SHA-256；
-- 增加自动生成 GitHub Release、压缩包和校验文件的工作流；
-- 明确 Cloudflare 小黄云只保护 WebUI，不代理 BT TCP/UDP 端口；
+### 可靠性
 
-## v1.0.0
+- 不再依赖 Debian 12 不支持的 `--torrenting-port` 命令行参数，改由配置和 WebAPI 设置监听端口。
+- Swap 检测同时覆盖活动 Swap、fstab 条目和已有 `/swapfile`。
+- 创建 Swap 前检查磁盘余量，失败回退时先清理本次创建的空文件。
+- Release 同时打包 `SECURITY.md` 和可执行 `check.sh`。
 
-- Debian 13 amd64 初始版本；
-- 安装 qBittorrent-nox、Caddy、UFW 和 Swap；
-- 提供中文设置清单、操作手册和故障排查。
+### 文档
+
+- 重排 README，明确一行安装、域名替换、Cloudflare、Swap 和安装后步骤。
+- 重写 Debian 12/13 小白手册、设置清单和故障排查。
+
+## 1.1.2 - 2026-07-25
+
+- 一行 bootstrap 安装时交互询问域名。
+- 清理 README 中与通用部署无关的临时速度诊断内容。
+- 改进 Release 校验与固定版本下载。
+
+## 1.1.1 - 2026-07-25
+
+- 修复 Release 工作流验证逻辑。
+- 发布固定版本安装资源与 SHA256SUMS。
+
+## 1.1.0 - 2026-07-25
+
+- 增加固定 Release 的一行安装入口。
+- 增加自动 Release 工作流。
+
+## 1.0.0 - 2026-07-25
+
+- 首个 Debian 13 安全部署版本。
+- 提供 qBittorrent、Caddy、UFW、systemd、Swap 与中文文档。
