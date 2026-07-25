@@ -1,0 +1,6 @@
+*.log
+*.torrent
+*.session
+credentials*
+.DS_Store
+Thumbs.db

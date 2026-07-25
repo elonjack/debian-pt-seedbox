@@ -1,0 +1,31 @@
+name: Validate
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  shell:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Parse Bash scripts
+        run: |
+          bash -n install.sh
+          bash -n check.sh
+
+      - name: Install ShellCheck
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y shellcheck
+
+      - name: Run ShellCheck
+        run: shellcheck install.sh check.sh
+
+      - name: Exercise help output
+        run: bash install.sh --help
